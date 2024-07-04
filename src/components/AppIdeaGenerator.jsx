@@ -1,7 +1,7 @@
+```jsx
 import { useState, useEffect } from 'react';
-import { AlertCircle, HelpCircle, ChevronDown, ChevronUp, Save, Upload, Clock, File, Folder, Link } from 'lucide-react';
+import { AlertCircle, HelpCircle, ChevronDown, ChevronUp, Save, Upload, Clock } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -13,6 +13,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxPopover,
+  ComboboxList,
+  ComboboxOption,
+} from "@/components/ui/combobox";
 
 const AppIdeaGenerator = () => {
   const [appType, setAppType] = useState('');
@@ -164,22 +171,33 @@ const AppIdeaGenerator = () => {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-1">
+                  Initial Idea
+                  {renderTooltip("Input your initial idea for the app. This will help in generating a more tailored prompt.")}
+                </label>
+                <Input
+                  placeholder="Enter your initial idea"
+                  value={ideaInput}
+                  onChange={(e) => setIdeaInput(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">
                   App Type
                   {renderTooltip("The general category of your application. Choose from Web App, Mobile App, Desktop App, IoT App, or AI/ML App.")}
                 </label>
-                <Select
-                  value={appType}
-                  onValueChange={setAppType}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select app type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {appTypes.map(type => (
-                      <SelectItem key={type} value={type}>{type}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Combobox value={appType} onChange={setAppType}>
+                  <ComboboxInput placeholder="Select app type" />
+                  <ComboboxPopover>
+                    <ComboboxList>
+                      {appTypes.map((type) => (
+                        <ComboboxOption key={type} value={type}>
+                          {type}
+                        </ComboboxOption>
+                      ))}
+                    </ComboboxList>
+                  </ComboboxPopover>
+                </Combobox>
               </div>
 
               <div>
@@ -212,19 +230,18 @@ const AppIdeaGenerator = () => {
                   Programming Language
                   {renderTooltip("The primary language used to develop the app. Choose from JavaScript, Python, Java, C#, Ruby, Go, or Swift.")}
                 </label>
-                <Select
-                  value={programmingLanguage}
-                  onValueChange={setProgrammingLanguage}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select programming language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {programmingLanguages.map(lang => (
-                      <SelectItem key={lang} value={lang}>{lang}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <Combobox value={programmingLanguage} onChange={setProgrammingLanguage}>
+                  <ComboboxInput placeholder="Select programming language" />
+                  <ComboboxPopover>
+                    <ComboboxList>
+                      {programmingLanguages.map((lang) => (
+                        <ComboboxOption key={lang} value={lang}>
+                          {lang}
+                        </ComboboxOption>
+                      ))}
+                    </ComboboxList>
+                  </ComboboxPopover>
+                </Combobox>
               </div>
 
               <Button 
@@ -243,20 +260,18 @@ const AppIdeaGenerator = () => {
                       Framework
                       {renderTooltip("The software framework used for development. Choose a framework based on the selected programming language.")}
                     </label>
-                    <Select
-                      value={framework}
-                      onValueChange={setFramework}
-                      disabled={!programmingLanguage}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select framework" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {programmingLanguage && frameworkOptions[programmingLanguage].map(fw => (
-                          <SelectItem key={fw} value={fw}>{fw}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Combobox value={framework} onChange={setFramework} disabled={!programmingLanguage}>
+                      <ComboboxInput placeholder="Select framework" />
+                      <ComboboxPopover>
+                        <ComboboxList>
+                          {programmingLanguage && frameworkOptions[programmingLanguage].map((fw) => (
+                            <ComboboxOption key={fw} value={fw}>
+                              {fw}
+                            </ComboboxOption>
+                          ))}
+                        </ComboboxList>
+                      </ComboboxPopover>
+                    </Combobox>
                   </div>
 
                   <div>
@@ -264,19 +279,18 @@ const AppIdeaGenerator = () => {
                       Architecture
                       {renderTooltip("The overall structure and organization of your app. Choose from Microservices, Monolithic, Serverless, Event-Driven, or Layered.")}
                     </label>
-                    <Select
-                      value={architecture}
-                      onValueChange={setArchitecture}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select architecture" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {architectures.map(arch => (
-                          <SelectItem key={arch} value={arch}>{arch}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Combobox value={architecture} onChange={setArchitecture}>
+                      <ComboboxInput placeholder="Select architecture" />
+                      <ComboboxPopover>
+                        <ComboboxList>
+                          {architectures.map((arch) => (
+                            <ComboboxOption key={arch} value={arch}>
+                              {arch}
+                            </ComboboxOption>
+                          ))}
+                        </ComboboxList>
+                      </ComboboxPopover>
+                    </Combobox>
                   </div>
 
                   <div>
@@ -311,19 +325,18 @@ const AppIdeaGenerator = () => {
                       Data Storage
                       {renderTooltip("How data will be stored in your app. Choose from SQL Database, NoSQL Database, File System, Cloud Storage, or In-Memory.")}
                     </label>
-                    <Select
-                      value={dataStorage}
-                      onValueChange={setDataStorage}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select data storage option" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {dataStorageOptions.map(option => (
-                          <SelectItem key={option} value={option}>{option}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Combobox value={dataStorage} onChange={setDataStorage}>
+                      <ComboboxInput placeholder="Select data storage option" />
+                      <ComboboxPopover>
+                        <ComboboxList>
+                          {dataStorageOptions.map((option) => (
+                            <ComboboxOption key={option} value={option}>
+                              {option}
+                            </ComboboxOption>
+                          ))}
+                        </ComboboxList>
+                      </ComboboxPopover>
+                    </Combobox>
                   </div>
 
                   <div>
@@ -445,22 +458,4 @@ const AppIdeaGenerator = () => {
               <p>No prompts generated yet.</p>
             ) : (
               <ul className="space-y-4">
-                {promptHistory.map((item, index) => (
-                  <li key={index} className="border-b pb-2">
-                    <p className="text-sm text-gray-500">
-                      <Clock className="inline-block mr-1 h-4 w-4" />
-                      {item.timestamp.toLocaleString()}
-                    </p>
-                    <p>{item.prompt}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-};
-
-export default AppIdeaGenerator;
+                {promptHistory.map((item, index
