@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, HelpCircle, ChevronDown, ChevronUp, Save, Upload, Clock } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Select } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { Tooltip } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -66,8 +66,13 @@ const AppIdeaGenerator = () => {
   };
 
   const renderTooltip = (content) => (
-    <Tooltip content={content}>
-      <HelpCircle className="h-4 w-4 ml-2 inline-block" />
+    <Tooltip>
+      <TooltipTrigger>
+        <HelpCircle className="h-4 w-4 ml-2 inline-block" />
+      </TooltipTrigger>
+      <TooltipContent>
+        {content}
+      </TooltipContent>
     </Tooltip>
   );
 
@@ -125,11 +130,15 @@ const AppIdeaGenerator = () => {
                 <Select
                   value={appType}
                   onValueChange={setAppType}
-                  placeholder="Select app type"
                 >
-                  {appTypes.map(type => (
-                    <Select.Option key={type} value={type}>{type}</Select.Option>
-                  ))}
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select app type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {appTypes.map(type => (
+                      <SelectItem key={type} value={type}>{type}</SelectItem>
+                    ))}
+                  </SelectContent>
                 </Select>
               </div>
 
@@ -166,11 +175,15 @@ const AppIdeaGenerator = () => {
                 <Select
                   value={programmingLanguage}
                   onValueChange={setProgrammingLanguage}
-                  placeholder="Select programming language"
                 >
-                  {programmingLanguages.map(lang => (
-                    <Select.Option key={lang} value={lang}>{lang}</Select.Option>
-                  ))}
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select programming language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {programmingLanguages.map(lang => (
+                      <SelectItem key={lang} value={lang}>{lang}</SelectItem>
+                    ))}
+                  </SelectContent>
                 </Select>
               </div>
 
@@ -193,12 +206,16 @@ const AppIdeaGenerator = () => {
                     <Select
                       value={framework}
                       onValueChange={setFramework}
-                      placeholder="Select framework"
                       disabled={!programmingLanguage}
                     >
-                      {programmingLanguage && frameworkOptions[programmingLanguage].map(fw => (
-                        <Select.Option key={fw} value={fw}>{fw}</Select.Option>
-                      ))}
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select framework" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {programmingLanguage && frameworkOptions[programmingLanguage].map(fw => (
+                          <SelectItem key={fw} value={fw}>{fw}</SelectItem>
+                        ))}
+                      </SelectContent>
                     </Select>
                   </div>
 
@@ -210,11 +227,15 @@ const AppIdeaGenerator = () => {
                     <Select
                       value={architecture}
                       onValueChange={setArchitecture}
-                      placeholder="Select architecture"
                     >
-                      {architectures.map(arch => (
-                        <Select.Option key={arch} value={arch}>{arch}</Select.Option>
-                      ))}
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select architecture" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {architectures.map(arch => (
+                          <SelectItem key={arch} value={arch}>{arch}</SelectItem>
+                        ))}
+                      </SelectContent>
                     </Select>
                   </div>
 
@@ -253,11 +274,15 @@ const AppIdeaGenerator = () => {
                     <Select
                       value={dataStorage}
                       onValueChange={setDataStorage}
-                      placeholder="Select data storage option"
                     >
-                      {dataStorageOptions.map(option => (
-                        <Select.Option key={option} value={option}>{option}</Select.Option>
-                      ))}
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select data storage option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {dataStorageOptions.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
                     </Select>
                   </div>
 

@@ -1,10 +1,16 @@
 import AppIdeaGenerator from "@/components/AppIdeaGenerator";
+import { Card } from "@/components/ui/card";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const Index = () => {
   return (
-    <div className="text-center">
-      <AppIdeaGenerator />
-    </div>
+    <TooltipProvider>
+      <div className="text-center">
+        <Card className="p-6">
+          <AppIdeaGenerator />
+        </Card>
+      </div>
+    </TooltipProvider>
   );
 };
 
