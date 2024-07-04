@@ -23,7 +23,9 @@ export const fetchDocumentation = async () => {
 
         export default Index;
       `,
-      notes: "This component allows users to specify various parameters to generate a detailed app idea prompt."
+      notes: "This component allows users to specify various parameters to generate a detailed app idea prompt.",
+      directions: "To use the App Idea Generator, navigate to the home page and fill out the form with the required details. Click 'Generate Prompt' to create a detailed app idea.",
+      instructions: "1. Select the type of app you want to create.\n2. Choose the main functionalities of the app.\n3. Select the programming language and framework.\n4. Specify the architecture and complexity level.\n5. Optionally, include authentication and data storage options.\n6. Provide the target audience for the app.\n7. Click 'Generate Prompt' to see the generated app idea."
     },
     {
       title: "Documentation",
@@ -104,7 +106,9 @@ export const fetchDocumentation = async () => {
 
         export default Documentation;
       `,
-      notes: "This component fetches and displays the documentation data, allowing users to search through it."
+      notes: "This component fetches and displays the documentation data, allowing users to search through it.",
+      directions: "To view the documentation, navigate to the 'Documentation' page from the sidebar or navbar. Use the search bar to filter the documentation based on keywords.",
+      instructions: "1. Navigate to the 'Documentation' page.\n2. Use the search bar to filter the documentation.\n3. Click on the tabs to view different sections of the documentation."
     },
     {
       title: "Navigation",
@@ -240,7 +244,9 @@ export const fetchDocumentation = async () => {
 
         export default Layout;
       `,
-      notes: "This component provides the navigation structure for the application, including a sidebar and user dropdown menu."
+      notes: "This component provides the navigation structure for the application, including a sidebar and user dropdown menu.",
+      directions: "To navigate through the application, use the sidebar or the navbar. The sidebar contains links to the main sections of the application.",
+      instructions: "1. Use the sidebar to navigate to different sections of the application.\n2. Click on the user icon in the navbar to access account settings and support options.\n3. Use the mobile menu button to open the sidebar on mobile devices."
     },
     {
       title: "Index Page",
@@ -264,7 +270,9 @@ export const fetchDocumentation = async () => {
 
         export default Index;
       `,
-      notes: "This is the main entry point of the application, displaying the App Idea Generator component."
+      notes: "This is the main entry point of the application, displaying the App Idea Generator component.",
+      directions: "To access the main features of the application, navigate to the home page. The home page contains the App Idea Generator component.",
+      instructions: "1. Navigate to the home page.\n2. Use the App Idea Generator to create detailed app ideas.\n3. Fill out the form with the required details and click 'Generate Prompt'."
     }
   ];
 };

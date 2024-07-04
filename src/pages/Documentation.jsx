@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { fetchDocumentation } from '@/utils/documentation';
 
@@ -62,6 +61,18 @@ const Documentation = () => {
                   <AlertTitle>Note</AlertTitle>
                   <AlertDescription>{doc.notes}</AlertDescription>
                 </Alert>
+              )}
+              {doc.directions && (
+                <div className="mb-4">
+                  <h3 className="text-xl font-semibold mb-2">Directions</h3>
+                  <p>{doc.directions}</p>
+                </div>
+              )}
+              {doc.instructions && (
+                <div className="mb-4">
+                  <h3 className="text-xl font-semibold mb-2">Instructions</h3>
+                  <p>{doc.instructions}</p>
+                </div>
               )}
             </Card>
           </TabsContent>
