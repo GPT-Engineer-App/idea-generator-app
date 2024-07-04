@@ -1,3 +1,4 @@
+```jsx
 import { useState, useEffect } from 'react';
 import { AlertCircle, HelpCircle, ChevronDown, ChevronUp, Save, Upload, Clock, File, Folder, Link } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -13,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Textarea } from '@/components/ui/textarea';
 
 const AppIdeaGenerator = () => {
   const [appType, setAppType] = useState('');
@@ -33,6 +35,7 @@ const AppIdeaGenerator = () => {
   const [selectedFolders, setSelectedFolders] = useState([]);
   const [inputURLs, setInputURLs] = useState([]);
   const [urlInput, setUrlInput] = useState('');
+  const [initialIdea, setInitialIdea] = useState('');
 
   const appTypes = ['Web App', 'Mobile App', 'Desktop App', 'IoT App', 'AI/ML App'];
   const programmingLanguages = ['JavaScript', 'Python', 'Java', 'C#', 'Ruby', 'Go', 'Swift'];
@@ -162,6 +165,19 @@ const AppIdeaGenerator = () => {
         <TabsContent value="generator">
           <Card className="p-6">
             <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Initial Idea
+                  {renderTooltip("Input your initial idea for the app. This will help in assessing and generating a more tailored prompt.")}
+                </label>
+                <Textarea
+                  placeholder="Describe your initial idea here..."
+                  value={initialIdea}
+                  onChange={(e) => setInitialIdea(e.target.value)}
+                  className="mb-4"
+                />
+              </div>
+
               <div>
                 <label className="block text-sm font-medium mb-1">
                   App Type
@@ -446,21 +462,4 @@ const AppIdeaGenerator = () => {
             ) : (
               <ul className="space-y-4">
                 {promptHistory.map((item, index) => (
-                  <li key={index} className="border-b pb-2">
-                    <p className="text-sm text-gray-500">
-                      <Clock className="inline-block mr-1 h-4 w-4" />
-                      {item.timestamp.toLocaleString()}
-                    </p>
-                    <p>{item.prompt}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-};
-
-export default AppIdeaGenerator;
+                  <li key={index} className
