@@ -25,6 +25,7 @@ const AppIdeaGenerator = () => {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [promptHistory, setPromptHistory] = useState([]);
   const [activeTab, setActiveTab] = useState('generator');
+  const [ideaInput, setIdeaInput] = useState('');
 
   const appTypes = ['Web App', 'Mobile App', 'Desktop App', 'IoT App', 'AI/ML App'];
   const programmingLanguages = ['JavaScript', 'Python', 'Java', 'C#', 'Ruby', 'Go', 'Swift'];
@@ -109,6 +110,20 @@ const AppIdeaGenerator = () => {
     reader.readAsText(file);
   };
 
+  const autofill = () => {
+    // Implement autofill logic here
+    // For now, just set some default values
+    setAppType('Web App');
+    setMainFunctionalities(['User Management', 'E-commerce']);
+    setProgrammingLanguage('JavaScript');
+    setFramework('React');
+    setArchitecture('Microservices');
+    setComplexity(7);
+    setIncludeAuth(true);
+    setDataStorage('SQL Database');
+    setTargetAudience('General Public');
+  };
+
   return (
     <div className="p-4 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">Advanced App Idea Generator</h1>
@@ -125,7 +140,7 @@ const AppIdeaGenerator = () => {
               <div>
                 <label className="block text-sm font-medium mb-1">
                   App Type
-                  {renderTooltip("The general category of your application")}
+                  {renderTooltip("The general category of your application. Choose from Web App, Mobile App, Desktop App, IoT App, or AI/ML App.")}
                 </label>
                 <Select
                   value={appType}
@@ -145,7 +160,7 @@ const AppIdeaGenerator = () => {
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Main Functionalities
-                  {renderTooltip("Key features of your app")}
+                  {renderTooltip("Key features of your app. Select multiple functionalities that your app will include.")}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {functionalityOptions.map(func => (
@@ -170,7 +185,7 @@ const AppIdeaGenerator = () => {
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Programming Language
-                  {renderTooltip("The primary language used to develop the app")}
+                  {renderTooltip("The primary language used to develop the app. Choose from JavaScript, Python, Java, C#, Ruby, Go, or Swift.")}
                 </label>
                 <Select
                   value={programmingLanguage}
@@ -201,7 +216,7 @@ const AppIdeaGenerator = () => {
                   <div>
                     <label className="block text-sm font-medium mb-1">
                       Framework
-                      {renderTooltip("The software framework used for development")}
+                      {renderTooltip("The software framework used for development. Choose a framework based on the selected programming language.")}
                     </label>
                     <Select
                       value={framework}
@@ -222,7 +237,7 @@ const AppIdeaGenerator = () => {
                   <div>
                     <label className="block text-sm font-medium mb-1">
                       Architecture
-                      {renderTooltip("The overall structure and organization of your app")}
+                      {renderTooltip("The overall structure and organization of your app. Choose from Microservices, Monolithic, Serverless, Event-Driven, or Layered.")}
                     </label>
                     <Select
                       value={architecture}
@@ -242,7 +257,7 @@ const AppIdeaGenerator = () => {
                   <div>
                     <label className="block text-sm font-medium mb-1">
                       Complexity Level (1-10)
-                      {renderTooltip("Estimated complexity of your app")}
+                      {renderTooltip("Estimated complexity of your app on a scale of 1 to 10.")}
                     </label>
                     <Slider
                       min={1}
@@ -262,14 +277,14 @@ const AppIdeaGenerator = () => {
                     />
                     <label htmlFor="auth-switch" className="ml-2 text-sm font-medium">
                       Include Authentication
-                      {renderTooltip("Whether the app requires user login")}
+                      {renderTooltip("Whether the app requires user login and authentication features.")}
                     </label>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-1">
                       Data Storage
-                      {renderTooltip("How data will be stored in your app")}
+                      {renderTooltip("How data will be stored in your app. Choose from SQL Database, NoSQL Database, File System, Cloud Storage, or In-Memory.")}
                     </label>
                     <Select
                       value={dataStorage}
@@ -289,7 +304,7 @@ const AppIdeaGenerator = () => {
                   <div>
                     <label className="block text-sm font-medium mb-1">
                       Target Audience
-                      {renderTooltip("The primary users of your app")}
+                      {renderTooltip("The primary users of your app. Specify the target audience for your app.")}
                     </label>
                     <Input
                       placeholder="e.g., young professionals"
@@ -300,7 +315,7 @@ const AppIdeaGenerator = () => {
                 </>
               )}
 
-              <div className="flex space-x-4">
+              <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <Button onClick={generatePrompt}>Generate Prompt</Button>
                 <Button onClick={exportConfig} variant="outline">
                   <Save className="mr-2 h-4 w-4" />
@@ -314,6 +329,9 @@ const AppIdeaGenerator = () => {
                   />
                   <Upload className="mr-2 h-4 w-4" />
                   Import Config
+                </Button>
+                <Button onClick={autofill} variant="outline">
+                  Autofill
                 </Button>
               </div>
 
