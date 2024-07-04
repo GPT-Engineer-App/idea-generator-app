@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { AlertCircle, HelpCircle, ChevronDown, ChevronUp, Save, Upload, Clock } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { AlertCircle, HelpCircle, ChevronDown, ChevronUp, Save, Upload, Clock, File, Folder, Link } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { Checkbox } from '@/components/ui/checkbox';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const AppIdeaGenerator = () => {
   const [appType, setAppType] = useState('');
@@ -26,6 +29,10 @@ const AppIdeaGenerator = () => {
   const [promptHistory, setPromptHistory] = useState([]);
   const [activeTab, setActiveTab] = useState('generator');
   const [ideaInput, setIdeaInput] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFolders, setSelectedFolders] = useState([]);
+  const [inputURLs, setInputURLs] = useState([]);
+  const [urlInput, setUrlInput] = useState('');
 
   const appTypes = ['Web App', 'Mobile App', 'Desktop App', 'IoT App', 'AI/ML App'];
   const programmingLanguages = ['JavaScript', 'Python', 'Java', 'C#', 'Ruby', 'Go', 'Swift'];
@@ -52,6 +59,21 @@ const AppIdeaGenerator = () => {
     }
   }, [programmingLanguage]);
 
+  const handleFileChange = (event) => {
+    setSelectedFiles([...selectedFiles, ...event.target.files]);
+  };
+
+  const handleFolderChange = (event) => {
+    setSelectedFolders([...selectedFolders, ...event.target.files]);
+  };
+
+  const handleAddURL = () => {
+    if (urlInput) {
+      setInputURLs([...inputURLs, urlInput]);
+      setUrlInput('');
+    }
+  };
+
   const generatePrompt = () => {
     let prompt = `Analyze the provided folders and files to create a functional ${appType} that `;
     prompt += mainFunctionalities.length > 0 ? `includes ${mainFunctionalities.join(', ')}. ` : '';
@@ -62,6 +84,9 @@ const AppIdeaGenerator = () => {
     prompt += includeAuth ? "Include user authentication and authorization. " : "";
     prompt += dataStorage ? `Use ${dataStorage} for data storage. ` : "";
     prompt += targetAudience ? `The target audience is ${targetAudience}. ` : "";
+    prompt += selectedFiles.length > 0 ? `Analyze the following files: ${selectedFiles.map(file => file.name).join(', ')}. ` : '';
+    prompt += selectedFolders.length > 0 ? `Analyze the following folders: ${selectedFolders.map(folder => folder.webkitRelativePath).join(', ')}. ` : '';
+    prompt += inputURLs.length > 0 ? `Analyze the following URLs: ${inputURLs.join(', ')}. ` : '';
     setGeneratedPrompt(prompt);
     setPromptHistory([...promptHistory, { timestamp: new Date(), prompt }]);
   };
@@ -314,6 +339,73 @@ const AppIdeaGenerator = () => {
                   </div>
                 </>
               )}
+
+              <div>
+                <label className="block text-sm font-medium mb-1">
+                  Select Files and Folders
+                  {renderTooltip("Select files and folders from your local device or input URLs for files and snippets.")}
+                </label>
+                <div className="flex flex-col space-y-4">
+                  <div>
+                    <Label htmlFor="file-input">Files</Label>
+                    <Input id="file-input" type="file" multiple onChange={handleFileChange} />
+                  </div>
+                  <div>
+                    <Label htmlFor="folder-input">Folders</Label>
+                    <Input id="folder-input" type="file" webkitdirectory="true" directory="true" multiple onChange={handleFolderChange} />
+                  </div>
+                  <div>
+                    <Label htmlFor="url-input">URLs</Label>
+                    <div className="flex space-x-2">
+                      <Input id="url-input" value={urlInput} onChange={(e) => setUrlInput(e.target.value)} placeholder="Enter URL" />
+                      <Button onClick={handleAddURL}>Add URL</Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <h3 className="text-lg font-medium">Selected Files</h3>
+                <ScrollArea className="h-32 border p-2">
+                  {selectedFiles.length === 0 ? (
+                    <p>No files selected.</p>
+                  ) : (
+                    <ul>
+                      {selectedFiles.map((file, index) => (
+                        <li key={index}>{file.name}</li>
+                      ))}
+                    </ul>
+                  )}
+                </ScrollArea>
+              </div>
+              <div className="mt-4">
+                <h3 className="text-lg font-medium">Selected Folders</h3>
+                <ScrollArea className="h-32 border p-2">
+                  {selectedFolders.length === 0 ? (
+                    <p>No folders selected.</p>
+                  ) : (
+                    <ul>
+                      {selectedFolders.map((folder, index) => (
+                        <li key={index}>{folder.webkitRelativePath}</li>
+                      ))}
+                    </ul>
+                  )}
+                </ScrollArea>
+              </div>
+              <div className="mt-4">
+                <h3 className="text-lg font-medium">Input URLs</h3>
+                <ScrollArea className="h-32 border p-2">
+                  {inputURLs.length === 0 ? (
+                    <p>No URLs added.</p>
+                  ) : (
+                    <ul>
+                      {inputURLs.map((url, index) => (
+                        <li key={index}>{url}</li>
+                      ))}
+                    </ul>
+                  )}
+                </ScrollArea>
+              </div>
 
               <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <Button onClick={generatePrompt}>Generate Prompt</Button>
