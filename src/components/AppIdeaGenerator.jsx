@@ -1,18 +1,20 @@
+import * as React from "react";
 import { useState, useEffect } from 'react';
 import { AlertCircle, HelpCircle, ChevronDown, ChevronUp, Save, Upload, Clock, File, Folder, Link } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ComboboxDemo } from '@/components/ui/combobox';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Textarea } from '@/components/ui/textarea';
 
 const AppIdeaGenerator = () => {
   const [appType, setAppType] = useState('');
@@ -164,22 +166,27 @@ const AppIdeaGenerator = () => {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-1">
+                  Initial Idea
+                  {renderTooltip("Input your initial idea for assessment.")}
+                </label>
+                <Textarea
+                  placeholder="Enter your initial idea here..."
+                  value={ideaInput}
+                  onChange={(e) => setIdeaInput(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">
                   App Type
                   {renderTooltip("The general category of your application. Choose from Web App, Mobile App, Desktop App, IoT App, or AI/ML App.")}
                 </label>
-                <Select
+                <ComboboxDemo
                   value={appType}
                   onValueChange={setAppType}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select app type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {appTypes.map(type => (
-                      <SelectItem key={type} value={type}>{type}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  options={appTypes}
+                  placeholder="Select app type"
+                />
               </div>
 
               <div>
@@ -187,158 +194,103 @@ const AppIdeaGenerator = () => {
                   Main Functionalities
                   {renderTooltip("Key features of your app. Select multiple functionalities that your app will include.")}
                 </label>
-                <div className="grid grid-cols-2 gap-2">
+                <ToggleGroup type="multiple" value={mainFunctionalities} onValueChange={setMainFunctionalities}>
                   {functionalityOptions.map(func => (
-                    <div key={func} className="flex items-center">
-                      <Checkbox
-                        id={func}
-                        checked={mainFunctionalities.includes(func)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setMainFunctionalities([...mainFunctionalities, func]);
-                          } else {
-                            setMainFunctionalities(mainFunctionalities.filter(f => f !== func));
-                          }
-                        }}
-                      />
-                      <label htmlFor={func} className="ml-2 text-sm">{func}</label>
-                    </div>
+                    <ToggleGroupItem key={func} value={func}>
+                      {func}
+                    </ToggleGroupItem>
                   ))}
-                </div>
+                </ToggleGroup>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-1">
-                  Programming Language
-                  {renderTooltip("The primary language used to develop the app. Choose from JavaScript, Python, Java, C#, Ruby, Go, or Swift.")}
-                </label>
-                <Select
-                  value={programmingLanguage}
-                  onValueChange={setProgrammingLanguage}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select programming language" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {programmingLanguages.map(lang => (
-                      <SelectItem key={lang} value={lang}>{lang}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Accordion type="single" collapsible>
+                <AccordionItem value="advanced-options">
+                  <AccordionTrigger>
+                    {showAdvanced ? "Hide Advanced Options" : "Show Advanced Options"}
+                    {showAdvanced ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Framework
+                        {renderTooltip("The software framework used for development. Choose a framework based on the selected programming language.")}
+                      </label>
+                      <ComboboxDemo
+                        value={framework}
+                        onValueChange={setFramework}
+                        options={programmingLanguage ? frameworkOptions[programmingLanguage] : []}
+                        placeholder="Select framework"
+                        disabled={!programmingLanguage}
+                      />
+                    </div>
 
-              <Button 
-                onClick={() => setShowAdvanced(!showAdvanced)}
-                variant="outline"
-                className="w-full"
-              >
-                {showAdvanced ? "Hide Advanced Options" : "Show Advanced Options"}
-                {showAdvanced ? <ChevronUp className="ml-2 h-4 w-4" /> : <ChevronDown className="ml-2 h-4 w-4" />}
-              </Button>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Architecture
+                        {renderTooltip("The overall structure and organization of your app. Choose from Microservices, Monolithic, Serverless, Event-Driven, or Layered.")}
+                      </label>
+                      <ComboboxDemo
+                        value={architecture}
+                        onValueChange={setArchitecture}
+                        options={architectures}
+                        placeholder="Select architecture"
+                      />
+                    </div>
 
-              {showAdvanced && (
-                <>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Framework
-                      {renderTooltip("The software framework used for development. Choose a framework based on the selected programming language.")}
-                    </label>
-                    <Select
-                      value={framework}
-                      onValueChange={setFramework}
-                      disabled={!programmingLanguage}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select framework" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {programmingLanguage && frameworkOptions[programmingLanguage].map(fw => (
-                          <SelectItem key={fw} value={fw}>{fw}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Complexity Level (1-10)
+                        {renderTooltip("Estimated complexity of your app on a scale of 1 to 10.")}
+                      </label>
+                      <Slider
+                        min={1}
+                        max={10}
+                        step={1}
+                        value={[complexity]}
+                        onValueChange={(value) => setComplexity(value[0])}
+                      />
+                      <span className="text-sm text-gray-500">{complexity}</span>
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Architecture
-                      {renderTooltip("The overall structure and organization of your app. Choose from Microservices, Monolithic, Serverless, Event-Driven, or Layered.")}
-                    </label>
-                    <Select
-                      value={architecture}
-                      onValueChange={setArchitecture}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select architecture" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {architectures.map(arch => (
-                          <SelectItem key={arch} value={arch}>{arch}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                    <div className="flex items-center">
+                      <Switch
+                        checked={includeAuth}
+                        onCheckedChange={setIncludeAuth}
+                        id="auth-switch"
+                      />
+                      <label htmlFor="auth-switch" className="ml-2 text-sm font-medium">
+                        Include Authentication
+                        {renderTooltip("Whether the app requires user login and authentication features.")}
+                      </label>
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Complexity Level (1-10)
-                      {renderTooltip("Estimated complexity of your app on a scale of 1 to 10.")}
-                    </label>
-                    <Slider
-                      min={1}
-                      max={10}
-                      step={1}
-                      value={[complexity]}
-                      onValueChange={(value) => setComplexity(value[0])}
-                    />
-                    <span className="text-sm text-gray-500">{complexity}</span>
-                  </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Data Storage
+                        {renderTooltip("How data will be stored in your app. Choose from SQL Database, NoSQL Database, File System, Cloud Storage, or In-Memory.")}
+                      </label>
+                      <ComboboxDemo
+                        value={dataStorage}
+                        onValueChange={setDataStorage}
+                        options={dataStorageOptions}
+                        placeholder="Select data storage option"
+                      />
+                    </div>
 
-                  <div className="flex items-center">
-                    <Switch
-                      checked={includeAuth}
-                      onCheckedChange={setIncludeAuth}
-                      id="auth-switch"
-                    />
-                    <label htmlFor="auth-switch" className="ml-2 text-sm font-medium">
-                      Include Authentication
-                      {renderTooltip("Whether the app requires user login and authentication features.")}
-                    </label>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Data Storage
-                      {renderTooltip("How data will be stored in your app. Choose from SQL Database, NoSQL Database, File System, Cloud Storage, or In-Memory.")}
-                    </label>
-                    <Select
-                      value={dataStorage}
-                      onValueChange={setDataStorage}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select data storage option" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {dataStorageOptions.map(option => (
-                          <SelectItem key={option} value={option}>{option}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-1">
-                      Target Audience
-                      {renderTooltip("The primary users of your app. Specify the target audience for your app.")}
-                    </label>
-                    <Input
-                      placeholder="e.g., young professionals"
-                      value={targetAudience}
-                      onChange={(e) => setTargetAudience(e.target.value)}
-                    />
-                  </div>
-                </>
-              )}
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Target Audience
+                        {renderTooltip("The primary users of your app. Specify the target audience for your app.")}
+                      </label>
+                      <Input
+                        placeholder="e.g., young professionals"
+                        value={targetAudience}
+                        onChange={(e) => setTargetAudience(e.target.value)}
+                      />
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
 
               <div>
                 <label className="block text-sm font-medium mb-1">
